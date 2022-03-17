@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Memory Game</title>
+    <link type="text/css" rel="stylesheet" href="jquery-ui.min.css">
+    <link rel="stylesheet" href="jquery-ui-dialog.css">
+    <link type="text/css" rel="stylesheet" href="memory.css">
+    <link rel="stylesheet" href="nightmodeswitch.css">
+</head>
+
+<body>
+    <header>
+        <div id="headerDiv">
+            <h1>Memory Game</h1>
+            <!-- Rounded switch -->
+            <label class="switch">
+                <input id="nightmodeswitch" type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <a href="index.html">
+            <button class="button" id="new_game" title="Resets setting to default">New Game</button>
+        </a>
+        <p id="player">Player: </p>
+        <p id="high_score">Highscore: </p>
+        <p id="correct">Correct: </p>
+        <div class="clear"></div>
+    </header>
+    <main>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tabs-1" id="play_game" title="Click to start playing">Play Game</a></li>
+                <li><a href="#tabs-2" title="Click to view rules">View Rules</a></li>
+                <li><a href="#tabs-3" title="Change settings">Settings</a></li>
+            </ul>
+            <div id="tabs-1">
+                <div id="cards">
+                    Click on New Game to start!
+                </div>
+            </div>
+            <div id="tabs-2">
+                <fieldset>
+                    <legend>How to play the Memory game</legend>
+                    <ul>
+                        <li>The cards are placed face down. Each card has a matching card.</li>
+                        <li>For each turn, the player select two cards.</li>
+                        <li>If the cards match, they are removed from the board.</li>
+                        <li>If the cards don't match, they are turned face down again.</li>
+                        <li>At the end of the game, the player receives a score based on the number
+                            of correct selections that were made.</li>
+                    </ul>
+                </fieldset>
+            </div>
+            <div id="tabs-3">
+                <label for='player_name'>Player name:</label>
+                <input type='text' id='player_name'><br>
+
+                <label for='num_cards'>Number of cards:</label>
+                <select id='num_cards'>
+                    <option>48</option>
+                    <option>40</option>
+                    <option>32</option>
+                    <option>24</option>
+                    <option>16</option>
+                    <option>8</option>
+                </select><br>
+
+                <div id="dialog" title="Alert!">
+                    <div id="dialogText"></div>
+                </div>
+                <input type='button' id='save_settings' value='Save Settings'>
+                </input>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="jquery-ui-dialog.js"></script>
+
+    <script src="widgets.js"></script>
+    <script src="playgames.js"></script>
+    <script src="gamesettings.js"></script>
+</body>
+
+</html>
