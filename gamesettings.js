@@ -16,7 +16,7 @@ $(() => {
       setHighscore.text("Highscore: " + sessionStorage.highScore);
 
       sessionStorage.playerName = inputPlayerName.val();
-      sessionStorage.numberOfCards = inputNumberOfCards.val() / 2;
+      sessionStorage.setItem("numberOfCards", inputNumberOfCards.val() / 2);
 
       setPlayerName.text("Player: " + sessionStorage.playerName);
       inputPlayerName.val("");
