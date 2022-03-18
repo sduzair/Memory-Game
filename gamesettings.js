@@ -54,7 +54,7 @@ $(() => {
       setPlayerName.text("Player: " + sessionStorage.currentPlayerName);
       inputPlayerName.val(sessionStorage.currentPlayerName);
 
-      modalDialogText.text("Settings updated. You are now ready to play the game.");
+      modalDialogText.text("Settings updated. Start new game to apply settings.");
       modalDialog.dialog("open");
       // inputPlayerName.val("");
     }
