@@ -1,13 +1,13 @@
 // this code does the following:
 // 1- runs the game on clicking "New Game"
 // 2- fetches game settings from session storage before running game
-// 2- displays "Correct" when a game finishes (see formula)
-// 3- defines game logic
+// 3- displays "Correct" when a game finishes (see formula)
+// 4- defines game logic
 
 // formula for highscore/correct:
 // ( correctSelections / ( correctSelections + wrongSelections ) ) * 100
 // correctSelections = if two consecutive selections have same image then update correctSelections by 1
-// wrongSelections = if two consecutive selections do not have same image then update correctSelections by 1
+// wrongSelections = if two consecutive selections do not have same image then update wrongSelections by 1
 
 $(() => {
   // ?take these from settings varialbes in session storage

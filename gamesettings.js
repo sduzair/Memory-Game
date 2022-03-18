@@ -1,6 +1,6 @@
 // this code does the following:
-// 1- sets default settings variables and stores then in session storage
-// 2= stores empty players array in session storage
+// 1- sets default settings variables and stores them in session storage upon inital page load
+// 2= stores players array in session storage with "Guest" as player
 // 3- new game settings taken from player input and updated in session storage
 //
 
