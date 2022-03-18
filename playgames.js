@@ -16,13 +16,12 @@ $(() => {
   var staticImages;
   var imageIds;
 
-  let refreshSetting = () => {
-    numberOfCards = parseInt(sessionStorage.getItem("numberOfCards"));
-    // ?take these from settings varialbes in session storage
-    currentPlayerName = $("#player_name").val();
-    staticImages = populateImagesMap(); // delete if not used
-    imageIds = randomizeIndex(); // get the randomize imagesIds to place the image
-  };
+  let refreshBoard = () => {
+    numberOfCards = parseInt(sessionStorage.getItem("numberOfCards"))
+    playerName = $('#player_name').val()
+    staticImages = populateImagesMap()// delete if not used 
+    imageIds = randomizeIndex()// get the randomize imagesIds to place the image
+  }
 
   localStorage.setItem("highScore", 0); // this will store the highscore on all tabs
   let backImage = "./images/back.png"; // address for card back side image
@@ -50,7 +49,7 @@ $(() => {
 
   //onClick action for playgames tab
   $("#new_game").on("click", () => {
-    refreshSetting();
+    refreshBoard();
     let parentDiv = $("#tabs-1");
     parentDiv.removeAttr("class");
     let cards = $("#cards");
@@ -71,6 +70,7 @@ $(() => {
 
   //structure keep the track of state during the game
   let structure = {
+    locked: false,
     counter: 0,
     indexStack: [2],
     elementStack: [2],
@@ -82,18 +82,17 @@ $(() => {
     // ! 2- get his highscore from "players" in session storage. USE: getPlayerHighscore("Guest")
     // ! 3- if current score is greater then update his highscore
     // ! 4- if current player is "Guest" update "Guest" score USE: updatePlayerScore("Guest", 67)
-    won: () => {
+    imageMatched: () => {
       let highScore = localStorage.getItem("highScore");
       if (highScore == 0 || structure.currentScore < highScore) {
         localStorage.setItem("highScore", structure.currentScore);
       }
       currentScore = 0;
       previoustIndex = null;
-      alert(`Congrates you have won! Your score${structure.currentScore}. HighScore is ${highScore}!`);
-      //TODO decide if we need to clear the state
-      //and refresh the settings below...OR winner animation keep on playing
+      // alert(`Congrates you have won! Your score${structure.currentScore}. HighScore is ${highScore}!`);
+      // //TODO decide if we need to clear the state
+      // //and refresh the settings below...OR winner animation keep on playing
       structure.clearState(true, true);
-      refreshSetting();
       //
     },
     //
@@ -106,7 +105,8 @@ $(() => {
       }
       if (really) {
         for (i in [0, 1]) {
-          if (structure.elementStack[i]) flipImage(structure.elementStack[i], structure.indexStack[i], true);
+          if (structure.elementStack[i])
+            structure.elementStack[i].css('visibility', 'hidden').animate({ 'visibility': 'hidden' }, "1000");
         }
       }
       structure.elementStack.length = 0;
@@ -115,32 +115,37 @@ $(() => {
 
   //on click action for the image. this wil flip the image back and front based on the current state
   $(document).on("click", ".imageInTheDiv", function () {
-    if (structure.counter == 2) {
-      for (i in [0, 1]) {
-        flipImage(structure.elementStack[i], structure.indexStack[i], true);
+    if (!structure.locked) {
+      structure.locked = !structure.locked
+      if (structure.counter == 2) {
+        for (i in [0, 1]) {
+          flipImage(structure.elementStack[i], structure.indexStack[i], true);
+        }
+        structure.clearState(false, false);
       }
-      structure.clearState(false, false);
-    }
-    let image = $(this);
-    let currentIndex = image.attr("index");
+      let image = $(this);
+      let currentIndex = image.attr("index");
 
-    flipImage(image, currentIndex, false);
-    if (structure.counter == 0) {
-      structure.elementStack[0] = image;
-      structure.indexStack[0] = currentIndex;
-      structure.counter++;
-      structure.currentScore++;
-    } else if (structure.elementStack[0][0] !== image[0] && structure.counter == 1) {
-      structure.elementStack[1] = image;
-      structure.indexStack[1] = currentIndex;
-      structure.counter++;
-      structure.currentScore++;
-      if (structure.indexStack[0] == structure.indexStack[1]) {
-        setTimeout(function () {
-          structure.won();
-        }, 2000);
-        confetti();
+      flipImage(image, currentIndex, false);
+      if (structure.counter == 0) {
+        structure.elementStack[0] = image;
+        structure.indexStack[0] = currentIndex;
+        structure.counter++;
+        structure.currentScore++;
+      } else if (structure.elementStack[0][0] !== image[0] && structure.counter == 1) {
+        structure.elementStack[1] = image;
+        structure.indexStack[1] = currentIndex;
+        structure.counter++;
+        structure.currentScore++;
+        if (structure.indexStack[0] == structure.indexStack[1]) {
+          structure.imageMatched();
+        }
       }
+//https://stackoverflow.com/questions/1065806/how-to-get-jquery-to-wait-until-an-effect-is-finished
+      setTimeout(function () {
+        structure.locked = !structure.locked
+      }, 2000);
+
     }
   });
 
@@ -152,7 +157,5 @@ $(() => {
       image.fadeIn("slow");
     });
   };
-  function confetti() {
-    //TODO
-  }
+
 });
