@@ -138,7 +138,8 @@ $(() => {
         structure.counter++;
         structure.currentScore++;
         if (structure.indexStack[0] == structure.indexStack[1]) {
-          structure.imageMatched();
+          //correctSelections ++
+          
         }
       }
 //https://stackoverflow.com/questions/1065806/how-to-get-jquery-to-wait-until-an-effect-is-finished
@@ -157,5 +158,13 @@ $(() => {
       image.fadeIn("slow");
     });
   };
+
+  function flipInsideThis(isMatched, image, imageIndex, toggleBack){
+    if(isMatched)
+    structure.imageMatched();
+    else{
+      flipImage()
+    }
+  }
 
 });
