@@ -51,7 +51,8 @@ div#cards {
 
 #player,
 #high_score,
-#correct {
+#correct,
+#noofcards {
   float: right;
 }
 
