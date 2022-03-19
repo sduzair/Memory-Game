@@ -84,9 +84,8 @@ PlayGame.prototype.getHighestScore = function () {
 };
 
 $(() => {
-  //onClick action for playgames tab
   let game;
-  
+  //onClick action for New Game button
   $("#new_game").on("click", function setupGameGrid() {
     // confetty congrgulations
     $.confetti.start();

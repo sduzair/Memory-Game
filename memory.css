@@ -47,6 +47,7 @@ header p {
 /* my CSS */
 div#cards {
   overflow: auto;
+  padding-left: 28px;
 }
 
 #player,
