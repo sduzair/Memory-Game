@@ -20,13 +20,8 @@
 // players.push({name: "John", highscore: 34})
 // sessionStorage.setItem("players", JSON.stringify(players))
 
-// initial default settings in session storage
-sessionStorage.setItem("players", JSON.stringify([{ name: "Guest", highscore: 0 }]));
-sessionStorage.setItem("numberOfCards", 24);
-sessionStorage.setItem("currentPlayerName", "Guest");
 
 $(() => {
-
   const inputPlayerName = $("#player_name");
   const modalDialog = $("#dialog");
   const modalDialogText = $("#dialogText");
@@ -35,7 +30,7 @@ $(() => {
   const setNoOfCards = $("#noofcards");
   const setHighScore = $("#high_score");
 
-  setNoOfCards.text("No of cards: " + (sessionStorage.numberOfCards * 2));
+  setNoOfCards.text("No of cards: " + sessionStorage.numberOfCards * 2);
   setPlayerName.text("Player: " + sessionStorage.currentPlayerName);
   setHighScore.text("Highscore: " + 0);
   inputPlayerName.val(sessionStorage.currentPlayerName);
@@ -52,7 +47,10 @@ $(() => {
 
       setNoOfCards.text("No of cards: " + inputNumberOfCards.val());
       setPlayerName.text("Player: " + sessionStorage.currentPlayerName);
-      inputPlayerName.val(sessionStorage.currentPlayerName);
+      setHighScore.text("Highscore: " + game.getPlayerHighscore(sessionStorage.currentPlayerName));
+      // reset correct
+      $("#correct").text("Correct: ");
+      // inputPlayerName.val(sessionStorage.currentPlayerName);
 
       modalDialogText.text("Settings updated. Start new game to apply settings.");
       modalDialog.dialog("open");

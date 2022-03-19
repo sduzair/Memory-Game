@@ -45,6 +45,15 @@ PlayGame.prototype.getPlayerHighscore = function () {
   return playerHighscore;
 };
 
+PlayGame.prototype.getPlayerHighscore = function (name) {
+  const players = JSON.parse(sessionStorage.getItem("players"));
+  let playerHighscore = -1;
+  players.forEach(player => {
+    if (player.name === name) playerHighscore = parseInt(player["highscore"]);
+  });
+  return playerHighscore;
+};
+
 // takes player name of String type returns false when player does not exist in session storage players array
 PlayGame.prototype.checkIfPlayerExists = function () {
   const players = JSON.parse(sessionStorage.getItem("players"));
@@ -83,36 +92,42 @@ PlayGame.prototype.getHighestScore = function () {
   return maxScore;
 };
 
+// creates game grid
+PlayGame.prototype.createGrid = function (parentDiv, cards, imageIds) {
+  parentDiv.removeAttr("class");
+  cards.empty();
+  for (let imageId of imageIds) {
+    let childDiv = document.createElement("div");
+    childDiv.className = "klass";
+    cards.append(childDiv);
+    let imageInsideChildDiv = document.createElement("img");
+    imageInsideChildDiv.src = this.backImage;
+    imageInsideChildDiv.id = "picture";
+    imageInsideChildDiv.className = "imageInTheDiv";
+    $(imageInsideChildDiv).attr("index", `${imageId}`);
+    childDiv.append(imageInsideChildDiv);
+  }
+};
+
+let game = new PlayGame(sessionStorage.numberOfCards, sessionStorage.currentPlayerName);
 $(() => {
-  let game;
   //onClick action for New Game button
   $("#new_game").on("click", function setupGameGrid() {
+    game = new PlayGame(sessionStorage.numberOfCards, sessionStorage.currentPlayerName);
+    // reset correct
+    $("#correct").text("Correct: ");
+    // reseting incase of abrupt game finish
+    structure.correctSelections = 0;
+    structure.incorrectSelections = 0;
     // confetty congrgulations
     $.confetti.start();
     setTimeout(() => {
       $.confetti.stop();
-    }, 2000);
+    }, 1500);
     $("#play_game").trigger("click");
-    // reset correct to 0
     console.log("current player: ", sessionStorage.currentPlayerName);
-    game = new PlayGame(sessionStorage.numberOfCards, sessionStorage.currentPlayerName);
 
-    let parentDiv = $("#tabs-1");
-    parentDiv.removeAttr("class");
-    let cards = $("#cards");
-    cards.empty();
-
-    for (let imageId of game.getImageIds()) {
-      let childDiv = document.createElement("div");
-      childDiv.className = "klass";
-      cards.append(childDiv);
-      let imageInsideChildDiv = document.createElement("img");
-      imageInsideChildDiv.src = game.backImage;
-      imageInsideChildDiv.id = "picture";
-      imageInsideChildDiv.className = "imageInTheDiv";
-      $(imageInsideChildDiv).attr("index", `${imageId}`);
-      childDiv.append(imageInsideChildDiv);
-    }
+    game.createGrid($("#tabs-1"), $("#cards"), game.getImageIds());
   });
 
   //structure keep the track of state during the game
@@ -165,7 +180,7 @@ $(() => {
       structure.locked = !structure.locked;
       if (structure.counter == 2) {
         structure.incorrectSelections++;
-        console.log(structure.incorrectSelections);
+        console.log("incorrectSelections", structure.incorrectSelections);
         for (i in [0, 1]) {
           flipImage(structure.elementStack[i], structure.indexStack[i], true, false);
         }
@@ -205,11 +220,12 @@ $(() => {
             if (structure.indexStack[0] == structure.indexStack[1]) {
               //correctSelections ++
               structure.correctSelections++;
-              console.log(structure.correctSelections);
+              console.log("correctSelections", structure.correctSelections);
 
+              // GAME COMPLETE CONDTION
               if (structure.correctSelections === game.numberOfCards) {
-                console.log(structure.correctSelections);
-                console.log(structure.incorrectSelections);
+                console.log("total correctSelections", structure.correctSelections);
+                console.log("total incorrectSelections", structure.incorrectSelections);
                 const score =
                   (structure.correctSelections / (structure.correctSelections + structure.incorrectSelections)) * 100;
 
@@ -219,7 +235,7 @@ $(() => {
                 } else {
                   game.updatePlayerScore(score);
                 }
-                $("#high_score").text("Highscore: " + game.getHighestScore());
+                $("#high_score").text("Highscore: " + game.getPlayerHighscore(game.playerName));
 
                 // reseting on game finish
                 structure.correctSelections = 0;
