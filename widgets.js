@@ -12,8 +12,8 @@ $(document).tooltip({
 
 $(".slider").on("click", () => {
   let lastLink = $("head > link").last()[0];
-  if (lastLink.getAttribute("href") !== "jquery-ui.theme.min.css") {
-    $("head").append("<link rel=stylesheet href=jquery-ui.theme.min.css>");
+  if (lastLink.getAttribute("href") !== "css/jquery-ui.theme.min.css") {
+    $("head").append("<link rel=stylesheet href=css/jquery-ui.theme.min.css>");
   } else {
     $("head > link").last().remove();
   }

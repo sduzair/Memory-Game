@@ -86,7 +86,14 @@ PlayGame.prototype.getHighestScore = function () {
 $(() => {
   //onClick action for playgames tab
   let game;
+  
   $("#new_game").on("click", function setupGameGrid() {
+    // confetty congrgulations
+    $.confetti.start();
+    setTimeout(() => {
+      $.confetti.stop();
+    }, 2000);
+    $("#play_game").trigger("click");
     // reset correct to 0
     console.log("current player: ", sessionStorage.currentPlayerName);
     game = new PlayGame(sessionStorage.numberOfCards, sessionStorage.currentPlayerName);
@@ -207,7 +214,7 @@ $(() => {
                 const score =
                   (structure.correctSelections / (structure.correctSelections + structure.incorrectSelections)) * 100;
 
-                $("#correct").text("Correct: " + score);
+                $("#correct").text("Correct: " + parseInt(score));
                 if (!game.checkIfPlayerExists()) {
                   game.createPlayer(score);
                 } else {
@@ -218,6 +225,12 @@ $(() => {
                 // reseting on game finish
                 structure.correctSelections = 0;
                 structure.incorrectSelections = 0;
+
+                // confetty congrgulations
+                $.confetti.start();
+                setTimeout(() => {
+                  $.confetti.stop();
+                }, 5000);
               }
               structure.imageMatched();
             }
