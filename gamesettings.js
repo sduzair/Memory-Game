@@ -20,11 +20,12 @@
 // players.push({name: "John", highscore: 34})
 // sessionStorage.setItem("players", JSON.stringify(players))
 
+// initial default settings in session storage
+sessionStorage.setItem("players", JSON.stringify([{ name: "Guest", highscore: 0 }]));
+sessionStorage.setItem("numberOfCards", 24);
+sessionStorage.setItem("currentPlayerName", "Guest");
+
 $(() => {
-  // initial default settings in session storage
-  sessionStorage.setItem("players", JSON.stringify([{ name: "Guest", highscore: 0 }]));
-  sessionStorage.setItem("numberOfCards", 48);
-  sessionStorage.setItem("currentPlayerName", "Guest");
 
   const inputPlayerName = $("#player_name");
   const modalDialog = $("#dialog");
@@ -34,10 +35,9 @@ $(() => {
   const setNoOfCards = $("#noofcards");
   const setHighScore = $("#high_score");
 
-  setNoOfCards.text("No of cards: " + sessionStorage.numberOfCards);
+  setNoOfCards.text("No of cards: " + (sessionStorage.numberOfCards * 2));
   setPlayerName.text("Player: " + sessionStorage.currentPlayerName);
-  console.log(getPlayerHighscore("Guest"));
-  setHighScore.text("Highscore: " + getPlayerHighscore("Guest"));
+  setHighScore.text("Highscore: " + 0);
   inputPlayerName.val(sessionStorage.currentPlayerName);
 
   // on click event to update settings
@@ -47,7 +47,7 @@ $(() => {
       modalDialogText.text("Please enter player name");
       modalDialog.dialog("open");
     } else {
-      sessionStorage.setItem("currentPlayerName", inputPlayerName.val());
+      sessionStorage.setItem("currentPlayerName", inputPlayerName.val().trim());
       sessionStorage.setItem("numberOfCards", inputNumberOfCards.val() / 2);
 
       setNoOfCards.text("No of cards: " + inputNumberOfCards.val());
@@ -61,41 +61,5 @@ $(() => {
   });
 });
 
-// utility functions for getting player details from session storage "players" array
 
-// takes player name of String type returns -1 when player does not exist in session storage players array
-function getPlayerHighscore(playerName) {
-  const players = JSON.parse(sessionStorage.getItem("players"));
-  let playerHighscore = -1;
-  players.forEach(player => {
-    if (player.name === playerName) playerHighscore = player.highscore;
-  });
-  return playerHighscore;
-}
 
-// takes player name of String type returns false when player does not exist in session storage players array
-function checkIfPlayerExists(playerName) {
-  const players = JSON.parse(sessionStorage.getItem("players"));
-  let exists = false;
-  players.forEach(player => {
-    if (player.name === playerName) exists = true;
-  });
-  return exists;
-}
-
-// takes player name of String type and highscore value returns true when update successful
-function updatePlayerScore(playerName, score) {
-  if (checkIfPlayerExists(playerName)) {
-    const prevScore = getPlayerHighscore(playerName);
-    if (prevScore < score) {
-      const players = JSON.parse(sessionStorage.getItem("players"));
-      players.map(player => {
-        if (player.name === playerName) player.highscore = score;
-      });
-      sessionStorage.setItem("players", JSON.stringify(players));
-    }
-    return true;
-  } else {
-    return false;
-  }
-}
