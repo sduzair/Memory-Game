@@ -119,6 +119,7 @@ $(() => {
     // reseting incase of abrupt game finish
     structure.correctSelections = 0;
     structure.incorrectSelections = 0;
+    $("#play_game").trigger("click");
     console.log("current player: ", sessionStorage.currentPlayerName);
 
     game.createGrid($("#tabs-1"), $("#cards"), game.getImageIds());
